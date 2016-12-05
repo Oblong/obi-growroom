@@ -1,0 +1,19 @@
+!<tag:oblong.com,2009:slaw/protein>
+descrips:
+- visidrome
+- feld-info
+ingests:
+  felds:
+    { main:
+      { window: [640, 0, 640, 360],
+        screen: main
+      },
+      feld1:
+      { window: [0, 0, 640, 360],
+        screen: main
+      },
+      feld2:
+      { window: [1280, 0, 640, 360],
+        screen: main
+      },
+    }

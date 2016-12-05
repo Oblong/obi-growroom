@@ -1,0 +1,31 @@
+Source: oblong-{{project_name}}-gs{{g_speak_version}}x1
+Section: non-free/oblong
+Priority: extra
+Maintainer: NAME <NAME@HOST.com>
+Build-Depends: cmake,
+               debhelper (>= 7.0.50~),
+               debconf,
+               g-speak{{g_speak_version}},
+               oblong-greenhouse-gs{{g_speak_version}}x,
+               oblong-growroom-v8-5.2.361-gs{{g_speak_version}}x | oblong-growroom-gs{{g_speak_version}}x,
+               oblong-staging-gs{{g_speak_version}}x,
+               oblong-webthing-{{cef_branch}}-gs{{g_speak_version}}x,
+
+Standards-Version: 3.8.4
+Homepage: FIXME
+Vcs-Git: FIXME
+Vcs-Browser: FIXME
+
+Package: oblong-{{project_name}}-gs{{g_speak_version}}x1
+Section: non-free/devel
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+Description: FIXME
+
+Package: oblong-{{project_name}}-gs{{g_speak_version}}x1-dbg
+Section: non-free/devel
+Architecture: any
+Depends: oblong-{{project_name}}-gs{{g_speak_version}}x1
+Description: Debug symbols for Oblong {{project_name}}
+ If you run into trouble with {{project_name}}, install this for mo better backtraces.

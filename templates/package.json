@@ -1,0 +1,32 @@
+{
+    "name": "{{project_name}}",
+    "version": "0.0.1",
+    "description": "[FILL IN]",
+    "author": "[FILL IN]",
+    "publish": false,
+    "devDependencies": {
+        "browserify": "^13.1.1",
+        "watchify": "^3.7.0"
+
+    },
+    "dependencies": {
+        "gelatin": "^0.1.1",
+        "gro-srcmap-support": "^0.1.1",
+        "gro-stdlib": "^0.1.0",
+        "javlin-pure": "0.0.1",
+        "lodash": "^3.8.0",
+        "perceive": "^0.2.0",
+        "pocket-physics": "^2.6.0",
+        "source-map": "^0.4.2",
+        "sprintf-js": "^1.0.2",
+        "squat": "^0.1.0"
+    },
+    "scripts": {
+        "build": "./node_modules/.bin/browserify -d scripts/index.js -o scripts/index-bundled.js",
+        "watch-to-pool": "./node_modules/.bin/watchify scripts/index.js -o './scripts/local-repl.js {{project_name}}-growroom > /dev/null' -v",
+        "obi-go": "obi build; npm run-script build; obi go",
+        "obi-build": "obi build",
+        "obi-stop": "obi stop",
+        "obi-clean": "obi clean"
+    }
+}

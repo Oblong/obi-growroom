@@ -1,0 +1,29 @@
+!<tag:oblong.com,2009:slaw/protein>
+# **************************************
+# {{project_name}} config
+# **************************************
+descrips:
+- {{project_name}}
+- main-config
+ingests:
+  search-path-list: ["share/{{project_name}}", "../share/{{project_name}}"]
+  # window background color
+  background-color: [0, 0, 0]
+  pools:
+    chief-pool: {{project_name}}
+    heartbeat-pool: tcp://localhost/{{project_name}}-pulse
+    log-pool: tcp://localhost/{{project_name}}-log
+    growroom-pool: {{project_name}}-growroom
+  # how often Syndicator sends out a protein to the heartbeat pool
+  heartbeat-interval: 1.0
+  # the size of the handipoint in units of
+  # fraction of feld height
+  handi-size: 0.02
+  floorclick-config:
+    delay-sec: 1.0
+    markers:
+      - radloc: [-0.5, -0.5, 0.98]
+        radsize: [0.005, 0.0, 0.0]
+      - radloc: [0.5, -0.5, 0.98]
+        radsize: [0.005, 0.0, 0.0]
+...

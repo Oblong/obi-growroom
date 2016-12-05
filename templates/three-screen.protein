@@ -1,0 +1,39 @@
+!<tag:oblong.com,2009:slaw/protein>
+descrips:
+- visidrome
+- screen-info
+ingests:
+  screens:
+    { main:
+      { type: basic,
+        cent: [ 0.0, 0.0, -1200.0 ],
+        phys-size: [ 1920.0, 1080.0 ],
+        norm: [ 0.0, 0.0, 1.0 ],
+        over: [ 1.0, 0.0, 0.0 ],
+        px-size: [ 640, 360 ],
+        px-origin: [640, 0],
+        eye-dist: 1200.0
+      },
+      feld1:
+      { type: basic,
+        cent: [ -1920.0, 0.0, -1200.0 ],
+        phys-size: [ 1920.0, 1080.0 ],
+        norm: [ 0.0, 0.0, 1.0 ],
+        over: [ 1.0, 0.0, 0.0 ],
+        px-size: [ 640, 360 ],
+        px-origin: [0, 0],
+        eye-dist: 1200.0
+      },
+      feld2:
+      { type: basic,
+        cent: [ 1920.0, 0.0, -1200.0 ],
+        phys-size: [ 1920.0, 1080.0 ],
+        norm: [ 0.0, 0.0, 1.0 ],
+        over: [ 1.0, 0.0, 0.0 ],
+        px-size: [ 640, 360 ],
+        px-origin: [1280, 0],
+        eye-dist: 1200.0
+      }
+    }
+
+

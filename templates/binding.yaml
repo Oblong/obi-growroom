@@ -1,0 +1,70 @@
+# To use this file, rename it to {{project_name}}.yaml, because
+# this name will percolate into a Javascript symbol namespace
+
+name: {{project_name}}
+namespace: []
+dependencies: [loam, basement, plasma, afferent, impetus, staging, greenhouse]
+export: true
+headers:
+  - '<libGrowroom/greenhouse_v8_binding.h>'
+  - '"AutoRotater.h"'
+  - '"PushHandler.h"'
+  - '"SeismoUtils.h"'
+  - '"Swiveler.h"'
+  - '"CountryBorders.h"'
+
+# Below are examples of how to bind to various elements of
+# AnkleObject-derived C++ classes.
+# (Currently there is no support for binding non-Ankle classes)
+free_functions:
+- { name: LatLongToSphere, args: [float64, float64, float64], ret: Vect}
+
+classes:
+- name: PushHandler
+  parent: oblong::greenhouse::JSThing
+  ctor: [Slaw]
+- name: AutoRotater
+  parent: oblong::greenhouse::JSThing
+  ctor: [Slaw]
+- name: Swiveler
+  parent: oblong::greenhouse::JSThing
+  ctor: [Slaw]
+- name: CountryBorders
+  parent: oblong::staging::JSLineStrip
+  mixins: [LocusNode]
+  ctor: [bool]
+
+###classes:
+###- name: Bindi
+###  parent: oblong::greenhouse::JSText
+###  ctor: []
+###  methods:
+###  - { name: SayHi }
+# - name: HandiPoint
+#   parent: oblong::js::noodoo::JSFlatThing
+#   flags:
+#   - { name: ShouldShowOffFeldMarker }
+#   properties:
+#   - { get: StyleName, set: SetStyleByName, type: Str }
+#   methods:
+#   - { name: StyleForProvenance, args: [Str] }
+#   static_methods:
+#   - { name: FindByProvenance, args: [Str], ret: HandiPoint * }
+# - name: WebThing
+#   ctor: [unt32, unt32]
+#   parent: oblong::js::noodoo::JSFlatThing
+#   properties:
+#   - { get: CanNavigateBack, type: bool }
+#   methods:
+#   - { name: NavigateTo, ret: ObRetort, args: [Str] }
+#   hooks:
+#   - { name: TitleChanged, args: [WebThing *, const Str&] }
+# - name: ObWebThing
+#   parent: JSWebThing
+#   ctor: [unt32, unt32, { type: Str, default: '""' }]
+
+# free_functions:
+# - name: DoubleDot
+#   orig_name: 'OverlapHelpers::DoubleDot'
+#   args: [Vect, Vect, Vect]
+#   ret: v2float64 }
