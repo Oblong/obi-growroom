@@ -12,6 +12,7 @@ headers:
   - '"SeismoUtils.h"'
   - '"Swiveler.h"'
   - '"CountryBorders.h"'
+  - '"GreenWebThing.h"'
 
 # Below are examples of how to bind to various elements of
 # AnkleObject-derived C++ classes.
@@ -33,6 +34,12 @@ classes:
   parent: oblong::staging::JSLineStrip
   mixins: [LocusNode]
   ctor: [bool]
+- name: GreenWebThing
+  parent: oblong::twillig::JSWebThing
+  mixins: [Node]
+  ctor: [{type: Str, default: "Str()"}]
+  methods:
+  - { name: NavigateTo, ret: ObRetort, args: [Str] }
 
 ###classes:
 ###- name: Bindi

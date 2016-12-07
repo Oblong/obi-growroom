@@ -130,3 +130,64 @@ wrappers of the underlying `obi` commands):
 
 ## Live Coding
 
+Live coding is enabled through two methods:
+
+### REPL (Read-Eval-Print Loop)
+
+This project starts a JavaScript REPL listening on port 4242 that can be
+accessed via `telnet` or any other JavaScript REPL tool
+([SublimeREPL](https://github.com/wuub/SublimeREPL) via `MOZRepl` for
+example).
+
+To live code, simply (using telnet as the example):
+
+```bash
+$ telnet localhost 4242
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^]'.
+
+Javascript REPL to application explore (port 4242).
+
+
+> staging.SetFeldsColor([0.33, 0.33, 0.33]);
+undefined
+> var text = new greenhouse.Text("Hello, World!");
+undefined
+> text.SlapOnFeld();
+undefined
+> text.string
+Hello, World!
+> text.string = "Hello, g-speak!"
+"Hello, g-speak!"
+```
+
+**NB:** These changes are not persistent and will be lost on reset/reload.
+
+
+### File Watching
+
+Live development using file watching is like normal development, you simply
+edit `scripts/index.js` and a separate process monitors the files for changes,
+recompiles, and sends the code to your application.
+
+To enable file watching, just do:
+
+```bash
+$ npm run-script watch-to-pool
+
+> explore@0.0.1 watch-to-pool /Users/bwilson/obsrc/demos/astor/explore
+> watchify scripts/index.js -o './scripts/local-repl.js  <appname>-growroom > /dev/null' -v
+
+430738 bytes written to ./scripts/local-repl.js  <appname>-growroom > /dev/null (0.35 seconds)
+```
+
+Edit `package.json` if you need to change the name of the pool to deposit to or
+need to deposit to a remote machine.  For example:
+
+```js
+"watch-to-pool": "./node_modules/.bin/watchify scripts/index.js -o './scripts/local-repl.js tcp://my-host/<appname>-growroom > /dev/null' -v",
+```
+
+The file watching method has the advantage of being persistent, if you restart
+the application your changes are preserved.
