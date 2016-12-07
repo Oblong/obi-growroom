@@ -116,7 +116,6 @@ $ ninja -j8
 Obi and CMake can be used interchangeably.  Obi assumes an out-of-tree build in
 a directory called `build`.
 
-
 ## Sublime Text Users
 
 This project has a [sublime-project file]({{project_name}}.sublime-project)
@@ -191,3 +190,20 @@ need to deposit to a remote machine.  For example:
 
 The file watching method has the advantage of being persistent, if you restart
 the application your changes are preserved.
+
+## Using Babel to enable modern JavaScript in g-speak 3.26
+
+If you're using g-speak 3.26 and need to support modern JavaScript (let,
+const, etc) globally you can enable babel support:
+
+```bash
+$ npm install --save-dev babelify babel-preset-es2015 babel-preset-react
+```
+
+Once babel is installed, modify the NPM scripts for `build` and
+`watch-to-pool` in `package.json` to run babel on the sources:
+
+```js
+    "build": "./node_modules/.bin/browserify -d scripts/index.js -o scripts/index-bundled.js -t [ babelify --presets [ es2015 react ] ]",
+    "watch-to-pool": "./node_modules/.bin/watchify scripts/index.js -o './scripts/local-repl.js <appname>-growroom > /dev/null' -v -t [ babelify --presets [ es2015 react ] ]",
+```
