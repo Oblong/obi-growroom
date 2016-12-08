@@ -11,23 +11,23 @@ console.log("Initialization has run: " + global.has_run);
 // Declare but do not init libraries, these should only be initialized
 // on the first run.
 
-var l; // lodash
-var j; // javlin-pure
+var _; // lodash
+var vec; // javlin-pure
 var perceive;
 var accelerate;
 var inertia;
 
 if (!global.has_run){
     console.log("Doing first run initialization");
-    l = require('lodash');
-    j = require('javlin-pure');
+    _ = require('lodash');
+    vec = require('javlin-pure');
     perceive = require('perceive');
     accelerate = require('pocket-physics/accelerate2d');
     inertia = require('pocket-physics/inertia2d');
 
     global.libs = {
-        l: l,
-        j: j,
+        _: _,
+        vec: vec,
         perceive: perceive,
         accelerate: accelerate,
         inertia: inertia
@@ -36,8 +36,8 @@ if (!global.has_run){
 } else {
     console.log("Re-run, cleaning scene graph");
     CleanUp ();
-    l = global.libs.l;
-    j = global.libs.j;
+    _ = global.libs._;
+    vec = global.libs.vec;
     perceive = global.libs.perceive;
     accelerate = global.libs.accelerate;
     inertia = global.libs.inertia;
