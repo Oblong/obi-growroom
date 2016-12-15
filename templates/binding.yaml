@@ -1,7 +1,7 @@
 # To use this file, rename it to {{project_name}}.yaml, because
 # this name will percolate into a Javascript symbol namespace
 
-name: {{project_name}}
+name: {{project_name_symbol}}
 namespace: []
 dependencies: [loam, basement, plasma, afferent, impetus, staging, greenhouse]
 export: true

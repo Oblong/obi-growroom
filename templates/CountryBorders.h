@@ -1,3 +1,6 @@
+
+/* (c)  oblong industries */
+
 #ifndef THIS_RIGHT_HERE_IS_THE_BORDER
 #define THIS_RIGHT_HERE_IS_THE_BORDER
 
@@ -5,19 +8,6 @@
 
 #include <libLoam/c/ob-vers.h>
 
-//  Function to convert latitude, longitude positions to
-//  spherical (globe) positions
-// inline Vect LatLongToSphereSurface (float64 radius, float64 lat, float64 lng)
-// { lat *= (M_PI / 180.0);
-//   lng *= (M_PI / 180.0);
-//   return Vect (cos (lat) * sin (lng) * radius,
-//                sin (lat) * radius,
-//                cos (lat) * cos (lng) * radius);
-//       float x = lng / M_PI;
-//       float y = ln((1 + sin(lat))/(1 - sin(lat))) / (4*M_PI);
-//       return Vect (x, y, 0.0)
-
-// }
 
 //  Stores and displays global country border data
 class CountryBorders  :  public LocusNode <oblong::staging::LineStrip>

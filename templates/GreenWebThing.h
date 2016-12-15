@@ -1,3 +1,6 @@
+
+/* (c)  oblong industries */
+
 #include <libLoam/c/ob-vers.h>
 #include <libTwillig/JSONWrite.h>
 #include <libTwillig/WebThing.h>
@@ -17,7 +20,7 @@ public:
 // if you're using g-speak 3.28 and up this populates the `ob` global in
 // any loaded webpage
 #if G_SPEAK_VERSION_NUMBER > 32700
-      AppendLoadFinishedHook ([] (WebThing * wt, const Str & url)
+      AppendLoadFinishedHook ([] (WebThing * wt, const Str & loaded_url, int code)
       { wt -> ExecuteJavascript (ObJSONFullyDefine (*wt));
         return OB_OK;
         });

@@ -1,6 +1,3 @@
-
-/* (c) oblong industries */
-
 // Needed for g-speak version
 #include <libLoam/c/ob-vers.h>
 
