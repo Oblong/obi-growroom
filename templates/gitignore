@@ -6,3 +6,5 @@ node_modules/
 .DS_Store
 /*.log
 obi-*-localhost.sh
+src/generated
+scripts/index-bundled.js
