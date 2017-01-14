@@ -14,7 +14,7 @@ cmake-args: ['-DCMAKE_BUILD_TYPE=RelWithDebInfo',
 # Comma-separated list of arguments passed to cmake --build
 # These are sensitive to the build system generator
 # specified in the cmake-args step
-build-args: ['-j8 -l8']
+build-args: ['-j8', '-l8']
 
 # The directory to perform the out-of-source cmake build
 build-dir: "build"
