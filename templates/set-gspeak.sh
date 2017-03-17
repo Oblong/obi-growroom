@@ -25,6 +25,7 @@ bs_yovo2v8version() {
     case $1 in
     3.2[0-6]) printf "";;            # e.g. oblong-growroom-gs3.26x_3.26.3_amd64.deb
     3.2?) printf %s "-v8-5.2.361";;     # e.g. oblong-growroom-v8-5.2.361-gs3.28x_3.28.1_amd64.deb
+    [4-9].[0-9]*) printf %s "-v8-5.2.361";;     # e.g. oblong-growroom-v8-5.2.361-gs3.28x_3.28.1_amd64.deb
     *) bs_abort "bs_yovo2v8version: don't know which v8 goes with g-speak $1" >&2;;
     esac
 }
@@ -38,7 +39,7 @@ usage() {
 version_major=`bs_get_major_version_git`
 
 case "$gspeak_version" in
-3.[0-9]*) ;;
+[1-9].[0-9]*) ;;
 *)  usage
     exit 1
     ;;

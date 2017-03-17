@@ -78,8 +78,12 @@ public:
       from = InvWranglePoint (from);
       to = InvWranglePoint (to);
 
-      bool did_hit = GeomSlab::RayRectIntersection (from, to, LocOf (V::Bottom,
-                                                                     H::Left),
+      bool did_hit = GeomSlab::RayRectIntersection (from, to,
+#if G_SPEAK_VERSION_NUMBER >= 32900
+                                                    LocOf (H_Align::Left, V_Align::Bottom),
+#else
+                                                    LocOf (V::Bottom, H::Left),
+#endif
                                                     Width  () * WebThing::Over (),
                                                     Height () * WebThing::Up (),
                                                     nullptr);
