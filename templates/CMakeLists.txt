@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.0)
+cmake_minimum_required (VERSION 3.3)
 project({{project_name}} CXX)
 
 # This is the amazingly complicated idiom for providing a default value for cache variables set from the commandline with -D
