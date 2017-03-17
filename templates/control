@@ -2,7 +2,7 @@ Source: oblong-{{project_name}}-gs{{g_speak_version}}x1
 Section: non-free/oblong
 Priority: extra
 Maintainer: NAME <NAME@HOST.com>
-Build-Depends: cmake,
+Build-Depends: oblong-yobuild11-cmake | cmake (>= 3.3),
                debhelper (>= 7.0.50~),
                debconf,
                g-speak{{g_speak_version}},
