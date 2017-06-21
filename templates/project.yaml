@@ -64,7 +64,7 @@ post-launch-cmds: []
 # Debuggers to use in obi go --debug=<debugger>
 debuggers:
   gdb: "gdb -ex run --args"
-  lldb: "lldb --"
+  lldb: "lldb -o run --"
   strace: "sudo strace"
   apitrace: "apitrace trace"
 
