@@ -138,10 +138,16 @@ def obi_new(**kwargs):
 
         except jinja2.TemplateNotFound:
             print("Warning: Could not find template {0}".format(template_name))
+    # git init
     os.chdir(project_path)
+    call(["git", "init"])
+    call(["git", "add", "--all"])
+    call(["git", "commit", "-m", "initial commit from obi template greenhouse"])
+    call(["git", "tag", "-am", "dev-0.1", "dev-0.1"])
 
     # if npm exists, install the things
     try:
+        os.chdir(project_path)
         call(["npm", "install"])
     except OSError as e:
         if (e.errno == errno.ENOENT):
