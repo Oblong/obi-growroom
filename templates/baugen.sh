@@ -21,7 +21,7 @@ set -e
 # If this project needs a newer version of obs or bau, just update these
 # to match the output of --version from the latest versions of obs and bau.
 # (FIXME: should we just query the server for the latest every time?)
-OBS_VERSIONOID=64
+OBS_VERSIONOID=68
 BAU_VERSIONOID=33
 
 is_ubuntu() {
