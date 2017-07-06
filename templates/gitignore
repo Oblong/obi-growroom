@@ -8,3 +8,5 @@ node_modules/
 obi-*-localhost.sh
 src/generated
 scripts/index-bundled.js
+obj-*-linux-gnu
+bs-*.dat

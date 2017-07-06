@@ -1,107 +1,79 @@
-cmake_minimum_required (VERSION 3.3)
+# /* (c) oblong industries */
+
+cmake_minimum_required (VERSION 3.5.1)
+
 project({{project_name}} CXX)
 
-# This is the amazingly complicated idiom for providing a default value for cache variables set from the commandline with -D
-# (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT makes this easier in just one special case, but general case is harder.)
-IF(DEFINED CMAKE_BUILD_TYPE AND (NOT ${CMAKE_BUILD_TYPE} STREQUAL "None"))
-   SET(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "Choose the type of build, options are: Debug Release RelWithDebInfo")
-ELSE()
-   SET(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of build, options are: Debug Release RelWithDebInfo" FORCE)
-ENDIF()
-
-
-# The list of g-speak libraries this app needs (careful, this is case sensitive).
-# It will pull in any other g-speak libraries needed by the ones you specify.
-# Actually, any pkgconfig library from g-speak, yobuild, or the system may be listed here.
-set(PLATFORM_LIBS libAfferent libTwillig libGreenhouse libWebThing libStaging libGrowroom)
-
-# NOTE: To change which g-speak this project uses, edit g-speak.dat to say e.g.
-#   G_SPEAK_HOME=/opt/oblong/g-speak3.22
-# Be careful to not add spaces.
-# You can also use -DG_SPEAK_HOME=/opt/oblong/g-speak3.22 on cmake commandline.
-# TIP: If you're building debian packages, run
-#   sh set-gspeak.sh 3.22
-# instead.
-IF(DEFINED G_SPEAK_HOME AND (NOT ${G_SPEAK_HOME} STREQUAL "None"))
-   SET(G_SPEAK_HOME ${G_SPEAK_HOME} CACHE STRING "Choose where g-speak was installed")
-ELSE()
-   # But default to value specified in debian/rules, set by set-gspeak.sh
-   execute_process(COMMAND awk "-F=" "/G_SPEAK_HOME=/ { print $2 }"
-		   INPUT_FILE "${PROJECT_SOURCE_DIR}/g-speak.dat"
-		   OUTPUT_VARIABLE G_SPEAK_HOME
-		   OUTPUT_STRIP_TRAILING_WHITESPACE
-		   )
-   SET(G_SPEAK_HOME "${G_SPEAK_HOME}" CACHE STRING "Choose where g-speak was installed" FORCE)
-ENDIF()
-
-# Calling FindGSpeak with a set of pkgconfig library names
-# adds the needed directories to the include path, and sets the variables
-#   G_SPEAK_LDFLAGS
-#   G_SPEAK_CFLAGS
-#   G_SPEAK_YOBUILD_HOME
-# If you specified libWebThing, it also sets CEF_BRANCH.
-INCLUDE("${G_SPEAK_HOME}/lib/cmake/FindGSpeak.cmake")
-FindGSpeak(${PLATFORM_LIBS})
-# Following line only needed for projects that use cef; it defines
-# the functions cef_bless_app and cef_install_blessed_app.
-INCLUDE("${G_SPEAK_YOBUILD_HOME}/lib/cmake/FindCEF${CEF_BRANCH}.cmake")
-
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${G_SPEAK_CFLAGS}")
-
-#
-# Debugging Options
-#
-set (CMAKE_VERBOSE_MAKEFILE 0) # Use 1 for debugging, 0 for release
-
-#
-# Ensure C++11 support
-#
+# Select C++11 dialect
 set(CMAKE_CXX_STANDARD 11)
-# Abort if C++11 not available
 set(CXX_STANDARD_REQUIRED YES)
-# Deselect vendor extensions to avoid compiler lock-in
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-#
-# Compiler flags
-#
-include(CheckCXXCompilerFlag)
+#---------- Dependencies and options settable from cmake commandline with -Dfoo=bar ---------
 
-# Common compiler flags for Windows, OSX and Linux
+# oblong.cmake handles a lot of boilerplate tasks, so many that a picture helps:
+# It looks up the cflags needed to compile against the libraries you list in PLATFORM_LIBS:
+#  PLATFORM_LIBS        -> ${G_SPEAK_CFLAGS} / ${G_SPEAK_LDFLAGS}
+# It checks commandline options and sets variables you should append to CMAKE_CXX_FLAGS, e.g.
+#  -DASAN=on, -DTSAN=on -> ${SANITIZER_FLAGS}
+#  -DCOVERAGE=on        -> ${COVERAGE_FLAGS}
+#  -DDEBUG=on           -> ${OPTIMIZE_FLAGS}
+# It sets variables you should check, e.g. 'if (BUILD_TESTS)'
+#  -DBUILD_TESTS        -> ${BUILD_TESTS}
+# It sets a few filesystem paths, based on -DG_SPEAK_HOME or the contents of debian/rules:
+#  ${G_SPEAK_HOME}, ${G_SPEAK_YOBUILD_HOME}
+# It defines functions you should call when building or installing apps that use webthing:
+#  cef_bless_app(), cef_install_blessed_app()
+# It defines a function to help use compiler warning flags (see below):
+#  oblong_append_supported_cxx_flags()
+# Note: oblong.cmake may move to /opt/oblong/g-speakX.Y/lib/cmake/ eventually.
+
+# Got that?  OK, let's set PLATFORM_LIBS to the libraries we need, and call oblong.cmake.
+# (Note: oblong.cmake uses pkg-config, which knows about dependencies, so you can often leave out e.g. libLoam.)
+# Actually, any pkgconfig library from g-speak, yobuild, or the system may be listed here.
+SET(PLATFORM_LIBS libAfferent libTwillig libGreenhouse libWebThing libStaging libGrowroom)
+include(oblong.cmake)
+
+#---------- Compiler flags ----------------------------------------------------
+
+# Select desired compiler warning level
 if (WIN32)
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /D_CRT_SECURE_NO_WARNINGS")
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /WX")
-  # Developers will probably prefer to use #pragma's in a .h file to
-  # suppress most warnings... but some warnings don't suppress that way,
-  # so do them here if needed.
-  #set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4996")
-else ()
-  # Flags commonly used on Linux and Mac.  Adjust to taste.
-  FOREACH(FLAG
-        -fdiagnostics-show-option
-        -Qunused-arguments
-        -Wall
-        -Wempty-body
-        -Werror
-        -Wno-error=unused-variable
-        -Wno-overloaded-virtual
-        -Wno-parentheses
-        -Wno-strict-overflow
-        -Wno-unused-but-set-variable
-        -Wno-unused-command-line-argument
-        -Wpointer-arith
-        -Wshadow
-        -Wtype-limits
-        -Wvla
-        -Wwrite-strings
+    set(ERROR_CXXFLAGS "/WX")
+    # /wdXXXX disables a particular warning for visual C++
+    set(FLAGS
+      #---- Turn on ALL THE WARNINGS! by default----
+      /W3
+      #---- OK, but not the annoying ones ------
+      /wd4996   # Ignore warnings about POSIX function names being deprecated.  Last I heard, POSIX didn't deprecate them.
+      #---- In case of emergency, break glass ------
+      # FIXME: fix underlying problem, then remove these suppressions
+      /wd4251   # 'identifier' : class 'type' needs to have dll-interface to be used by clients of class 'type2'
     )
-    string(REGEX REPLACE "[^a-zA-Z0-9_]" _ SANITIZED_FLAG ${FLAG})
-    CHECK_CXX_COMPILER_FLAG(${FLAG} COMPILER_SUPPORTS_${SANITIZED_FLAG})
-    IF(COMPILER_SUPPORTS_${SANITIZED_FLAG})
-      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAG}")
-    ENDIF()
-  ENDFOREACH()
+else()
+    set(ERROR_CXXFLAGS "-Werror")
+    set(FLAGS
+      #---- Turn on ALL THE WARNINGS! by default----
+      -Wall
+      -Wempty-body
+      -Wpointer-arith
+      -Wshadow
+      -Wstrict-prototypes
+      -Wsuggest-override
+      -Wtype-limits
+      -Wvla
+      -Wwrite-strings
+      -fdiagnostics-show-option
+      -Wno-error=overloaded-virtual
+      -Wno-error=unused-variable
+      )
 endif ()
+
+# Turn the wish list FLAGS into the supported subset ERROR_CXXFLAGS
+oblong_append_supported_cxx_flags(ERROR_CXXFLAGS ${FLAGS})
+
+# Put it all together
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${G_SPEAK_CFLAGS} ${OPTIMIZE_FLAGS} ${ERROR_CXXFLAGS} ${SANITIZER_FLAGS} ${COVERAGE_FLAGS}")
+
 
 #
 # Growroom binding generation
@@ -156,3 +128,25 @@ cef_bless_app({{project_name}})
 #INSTALL(TARGETS {{project_name}} RUNTIME DESTINATION "bin")
 # but apps that use cef have to do this instead:
 cef_install_blessed_app({{project_name}})
+
+
+#------------- Tell user what happened ----------------------------------------
+
+MESSAGE("--------- -D Options from commandline -----------------------")
+MESSAGE("ASAN:                   ${ASAN}; see https://github.com/google/sanitizers/wiki/AddressSanitizer")
+MESSAGE("BUILD_TESTS:            ${BUILD_TESTS}")
+MESSAGE("CMAKE_BUILD_TYPE:       ${CMAKE_BUILD_TYPE} (choices are Debug, Release, or RelWithDebInfo)")
+MESSAGE("CMAKE_VERBOSE_MAKEFILE: ${CMAKE_VERBOSE_MAKEFILE}")
+MESSAGE("CMAKE_INSTALL_PREFIX:   ${CMAKE_INSTALL_PREFIX}")
+MESSAGE("COVERAGE:               ${COVERAGE}")
+MESSAGE("G_SPEAK_HOME:           ${G_SPEAK_HOME}")
+MESSAGE("USE_STATIC_G_SPEAK:     ${USE_STATIC_G_SPEAK}")
+MESSAGE("")
+MESSAGE("--------- Intermediate compiler flags -----------------------")
+MESSAGE("COVERAGE_FLAGS:         ${COVERAGE_FLAGS}")
+MESSAGE("ERROR_CXXFLAGS:         ${ERROR_CXXFLAGS}")
+MESSAGE("OPTIMIZE_FLAGS:         ${OPTIMIZE_FLAGS}")
+MESSAGE("SANITIZER_FLAGS:        ${SANITIZER_FLAGS}")
+MESSAGE("")
+MESSAGE("--------- Final global compiler flags -----------------------")
+MESSAGE("CMAKE_CXX_FLAGS:        ${CMAKE_CXX_FLAGS}")
