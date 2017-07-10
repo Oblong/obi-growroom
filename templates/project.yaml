@@ -50,7 +50,7 @@ local-post-stop-cmds: []
 rsync-excludes: [".git", "build"]
 
 # List of additional parameters to pass to rsync
-rsync-extra-opts: []
+# rsync-extra-opts: "--copy-links --partial"
 
 # Fetch task
 # ----------
