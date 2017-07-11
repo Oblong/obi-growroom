@@ -63,8 +63,9 @@ else()
       -Wvla
       -Wwrite-strings
       -fdiagnostics-show-option
-      -Wno-error=overloaded-virtual
       -Wno-error=unused-variable
+      -Wno-error=overloaded-virtual
+      -Wno-error=suggest-override
       )
 endif ()
 
