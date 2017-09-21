@@ -109,7 +109,7 @@ def obi_new(**kwargs):
         ("project.yaml", "project.yaml", {}),
         ("package.json", "package.json", {}),
         ("README.md", "README.md", {}),
-        ["CHANGELOG.md", "CHANGELOG.md"],
+        ("CHANGELOG.md", "CHANGELOG.md", {}),
         (os.path.join("debian", "rules"), "rules", {'mode': 0755}),
         ("three-feld.protein", "three-feld.protein", {}),
         ("three-screen.protein", "three-screen.protein", {}),
