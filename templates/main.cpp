@@ -16,7 +16,6 @@
 #endif
 
 // From staging
-#include <libStaging/libLoam/c++/Override.h>    // C++11 override MACRO
 #include <libStaging/libPlasma/c++/Slawzall.h>  // Emit/Delve sugar
 #include <libStaging/libBasement/Lumberjack.h>  // logging (OB_INFORM, OB_WARN)
 #include <libStaging/libTwillig/Barbiturate.h>  // Support for application sedation and revival
